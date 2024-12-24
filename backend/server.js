@@ -127,12 +127,34 @@ const movies = [
     {
         title: "Rang De Basanti",
         frames: [
-            "/day11/frame01.jpg",
-            "/day11/frame02.jpg",
-            "/day11/frame03.jpg",
-            "/day11/frame04.jpg",
-            "/day11/frame05.jpg",
-            "/day11/frame06.jpg"
+            "/day11/frame01.png",
+            "/day11/frame02.png",
+            "/day11/frame03.png",
+            "/day11/frame04.png",
+            "/day11/frame05.png",
+            "/day11/frame06.png"
+        ]
+    },
+    {
+        title: "Deewaar",
+        frames: [
+            "/day12/frame01.png",
+            "/day12/frame02.png",
+            "/day12/frame03.png",
+            "/day12/frame04.png",
+            "/day12/frame05.png",
+            "/day12/frame06.png"
+        ]
+    },
+    {
+        title: "Talvar",
+        frames: [
+            "/day13/frame01.png",
+            "/day13/frame02.png",
+            "/day13/frame03.png",
+            "/day13/frame04.png",
+            "/day13/frame05.png",
+            "/day13/frame06.png"
         ]
     }
 ];
@@ -143,7 +165,7 @@ const movies = [
 //         const randomMovie = movies[Math.floor(Math.random() * movies.length)];
 //         const movieWithFullPaths = {
 //             title: randomMovie.title,
-//             frames: randomMovie.frames.map(frame => `http://localhost:${PORT}/static${frame}`)
+//             frames: randomMovie.frames.map(frame => http://localhost:${PORT}/static${frame})
 //         };
 //         console.log('Sending movie:', movieWithFullPaths);
 //         res.json(movieWithFullPaths);
@@ -175,7 +197,19 @@ app.get('/api/next-movie', (req, res) => {
     }
 });
 
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+app.get('/api/suggest-movie', (req, res) => {
+    const query = req.query.q.toLowerCase();
+    
+    // Get the movie titles from the `movies` array dynamically
+    const movieTitles = movies.map(movie => movie.title);
+    
+    const suggestions = movieTitles.filter(movie =>
+      movie.toLowerCase().includes(query)
+    );
+    
+    res.json(suggestions);
 });

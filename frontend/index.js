@@ -4,6 +4,8 @@ const movieFrame = document.getElementById("movie-frame");
       const gameOverDiv = document.getElementById("game-over");
       const randomMovieBtn = document.getElementById("random-movie-btn");
       const errorMessage = document.getElementById("error-message");
+const suggestionsDiv = document.getElementById("suggestions");
+let highlightedIndex = -1;
 
       let currentMovie;
       let currentFrame = 0;
@@ -93,6 +95,69 @@ const movieFrame = document.getElementById("movie-frame");
         }
       }
 
+      async function fetchSuggestions(query) {
+        try {
+          const response = await fetch(`http://localhost:3000/api/suggest-movie?q=${query}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch suggestions");
+          }
+          const suggestions = await response.json();
+          return suggestions;
+        } catch (error) {
+          console.error("Error fetching suggestions:", error);
+          return [];
+        }
+      }
+      
+      function showSuggestions(suggestions) {
+        // Clear previous suggestions
+        suggestionsDiv.innerHTML = "";
+      
+        // If no suggestions, hide the dropdown
+        if (suggestions.length === 0) {
+          suggestionsDiv.style.display = "none";
+          return;
+        }
+      
+        // Show suggestions dropdown
+        suggestionsDiv.style.display = "block";
+      
+        // Add each suggestion to the dropdown
+        suggestions.forEach((suggestion) => {
+          const suggestionItem = document.createElement("div");
+          suggestionItem.className = "suggestion-item";
+          suggestionItem.textContent = suggestion;
+
+          // Add keyboard navigation and hover effect
+    suggestionItem.addEventListener("mouseenter", () => {
+      highlightedIndex = index;
+      updateHighlightedSuggestion();
+    });
+        
+          
+          // Handle click on a suggestion
+          suggestionItem.addEventListener("click", () => {
+            searchInput.value = suggestion; // Populate input with the selected suggestion
+            suggestionsDiv.style.display = "none"; // Hide suggestions
+          });
+      
+          suggestionsDiv.appendChild(suggestionItem);
+        });
+      }
+
+      
+function updateHighlightedSuggestion() {
+  const suggestionItems = suggestionsDiv.querySelectorAll(".suggestion-item");
+
+  suggestionItems.forEach((item, index) => {
+    if (index === highlightedIndex) {
+      item.style.backgroundColor = "#233034"; // Highlighted color
+    } else {
+      item.style.backgroundColor = ""; // Reset other items
+    }
+  });
+}
+
       searchInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
           handleGuess(searchInput.value);
@@ -106,6 +171,37 @@ const movieFrame = document.getElementById("movie-frame");
       });
 
       randomMovieBtn.addEventListener("click", initGame);
+
+      searchInput.addEventListener("input", async (e) => {
+        const query = e.target.value.trim();
+        if (query.length === 0) {
+          suggestionsDiv.style.display = "none"; // Hide suggestions if input is empty
+          return;
+        }
+      
+        const suggestions = await fetchSuggestions(query);
+        showSuggestions(suggestions);
+      });
+
+      searchInput.addEventListener("keydown", (e) => {
+        const suggestionItems = suggestionsDiv.querySelectorAll(".suggestion-item");
+      
+        if (e.key === "ArrowDown") {
+          if (highlightedIndex < suggestionItems.length - 1) {
+            highlightedIndex++;
+            updateHighlightedSuggestion();
+          }
+        } else if (e.key === "ArrowUp") {
+          if (highlightedIndex > 0) {
+            highlightedIndex--;
+            updateHighlightedSuggestion();
+          }
+        } else if (e.key === "Enter" && highlightedIndex !== -1) {
+          searchInput.value = suggestionItems[highlightedIndex].textContent;
+          suggestionsDiv.style.display = "none"; // Hide suggestions after selection
+          highlightedIndex = -1; // Reset highlighted index
+        }
+      });
 
       // Add error handling for image loading
       // movieFrame.addEventListener('error', () => {
