@@ -150,4 +150,79 @@
         text-align: center;
         margin-top: 10px;
       }
-    
+
+      .suggestions {
+        position: absolute;
+        background-color: rgb(18, 15, 15);
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        width: calc(100% - 20px); /* Adjust width to match input field */
+        z-index: 10;
+      }
+      
+      .suggestion-item {
+        padding: 10px;
+        cursor: pointer;
+      }
+      
+      .suggestion-item:hover {
+        background-color: #211c1c;
+      }
+
+      /* Basic Styles */
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: rgb(0, 0, 0);
+  max-height: 200px;
+  overflow-y: auto;
+  display: none; /* Hide by default */
+  z-index: 1000;
+}
+
+.suggestions div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions div:hover {
+  background-color: #233034;
+}
+
+.submit-btn {
+  margin-top: 10px;
+}
+
+.guesses, .game-over {
+  margin-top: 20px;
+}
+
+.random-movie-btn {
+  margin-top: 20px;
+}
+
+/* You can add more styles as needed */
