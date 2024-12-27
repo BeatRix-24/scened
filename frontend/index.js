@@ -1,16 +1,16 @@
 const movieFrame = document.getElementById("movie-frame");
-      const searchInput = document.getElementById("search-input");
-      const submitBtn = document.getElementById("submit-btn");
-      const gameOverDiv = document.getElementById("game-over");
-      const randomMovieBtn = document.getElementById("random-movie-btn");
-      const errorMessage = document.getElementById("error-message");
+const searchInput = document.getElementById("search-input");
+const submitBtn = document.getElementById("submit-btn");
+const gameOverDiv = document.getElementById("game-over");
+const randomMovieBtn = document.getElementById("random-movie-btn");
+const errorMessage = document.getElementById("error-message");
 const suggestionsDiv = document.getElementById("suggestions");
 let highlightedIndex = -1;
 
-      let currentMovie;
-      let currentFrame = 0;
-      let guessesRemaining = 6;
-      let gameWon = false;
+let currentMovie;
+let currentFrame = 0;
+let guessesRemaining = 6;
+let gameWon = false;
 
       async function fetchRandomMovie() {
         try {

@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Enable CORS
 app.use(cors());
@@ -156,24 +156,53 @@ const movies = [
             "/day13/frame05.png",
             "/day13/frame06.png"
         ]
+    },
+    {
+        title: "Dhoom",
+        frames: [
+            "/day14/frame01.png",
+            "/day14/frame02.png",
+            "/day14/frame03.png",
+            "/day14/frame04.png",
+            "/day14/frame05.png",
+            "/day14/frame06.png"
+        ]
+    },
+    {
+        title: "Johnny Gaddaar",
+        frames: [
+            "/day15/frame01.png",
+            "/day15/frame02.png",
+            "/day15/frame03.png",
+            "/day15/frame04.png",
+            "/day15/frame05.png",
+            "/day15/frame06.png"
+        ]
     }
 ];
 
 // Random movie endpoint
-// app.get('/api/random-movie', (req, res) => {
-//     try {
-//         const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-//         const movieWithFullPaths = {
-//             title: randomMovie.title,
-//             frames: randomMovie.frames.map(frame => http://localhost:${PORT}/static${frame})
-//         };
-//         console.log('Sending movie:', movieWithFullPaths);
-//         res.json(movieWithFullPaths);
-//     } catch (error) {
-//         console.error('Error serving random movie:', error);
-//         res.status(500).json({ error: 'Failed to get random movie' });
-//     }
-// });
+app.get('/api/random-movie', async (req, res) => {
+    try {
+        if (!movies || movies.length === 0) {
+            console.error('Movies array is empty.');
+            return res.status(404).json({ error: 'No movies available' });
+        }
+
+        const randomMovie = movies[Math.floor(Math.random() * movies.length)];
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+        const movieWithFullPaths = {
+            title: randomMovie.title,
+            frames: randomMovie.frames.map(frame => `${baseUrl}/static${frame}`)
+        };
+
+        console.log('Random movie selected:', movieWithFullPaths);
+        res.json(movieWithFullPaths);
+    } catch (error) {
+        console.error('Error serving random movie:', error);
+        res.status(500).json({ error: 'Failed to get random movie' });
+    }
+});
 
 let currentMovieIndex = 0; // Tracks the current movie index
 
