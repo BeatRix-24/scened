@@ -4,14 +4,27 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3001;
 
-// Enable CORS
-app.use(cors());
-
+app.use(cors({
+    origin: ['http://34.93.164.60', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 // Serve static files from the movies directory
-app.use('/static', express.static(path.join(__dirname, 'movies')));
+const staticPath = path.join(__dirname, 'movies');
+console.log('Static files path:', staticPath);
 
+app.use('/static', (req, res, next) => {
+    console.log('Static file requested:', req.url);
+    next();
+}, express.static(staticPath, {
+    maxAge: '1d',
+    setHeaders: (res, path) => {
+        res.set('Access-Control-Allow-Origin', '*');
+    }
+}));
 // Movies data
 const movies = [
     {
@@ -159,35 +172,19 @@ const movies = [
     }
 ];
 
-// Random movie endpoint
-// app.get('/api/random-movie', (req, res) => {
-//     try {
-//         const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-//         const movieWithFullPaths = {
-//             title: randomMovie.title,
-//             frames: randomMovie.frames.map(frame => http://localhost:${PORT}/static${frame})
-//         };
-//         console.log('Sending movie:', movieWithFullPaths);
-//         res.json(movieWithFullPaths);
-//     } catch (error) {
-//         console.error('Error serving random movie:', error);
-//         res.status(500).json({ error: 'Failed to get random movie' });
-//     }
-// });
 
 let currentMovieIndex = 0; // Tracks the current movie index
 
 app.get('/api/next-movie', (req, res) => {
     try {
         const movie = movies[currentMovieIndex];
-        const movieWithFullPaths = {
-            title: movie.title,
-            frames: movie.frames.map(frame => `http://localhost:${PORT}/static${frame}`)
-        };
-
+        
+       const movieWithFullPaths = {
+    title: movie.title,
+    frames: movie.frames.map(frame => `http://34.93.164.60/static${frame}`)  // Changed from 3001 to 80
+};
         console.log('Sending movie:', movieWithFullPaths);
 
-        // Increment the index and wrap around if it reaches the end
         currentMovieIndex = (currentMovieIndex + 1) % movies.length;
 
         res.json(movieWithFullPaths);
@@ -197,19 +194,33 @@ app.get('/api/next-movie', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.get('/api/suggest-movie', (req, res) => {
+    try {
+        const query = req.query.q;
+        console.log('Suggestion query received:', query);
+
+        if (!query) {
+            console.log('No query provided');
+            return res.status(400).json({ error: 'Query parameter "q" is required' });
+        }
+
+        const movieTitles = movies.map(movie => movie.title);
+        const suggestions = movieTitles
+            .filter(title => title.toLowerCase().includes(query.toLowerCase()));
+
+        console.log('Sending suggestions:', suggestions);
+        res.json(suggestions);
+    } catch (error) {
+        console.error('Error in suggest-movie endpoint:', error);
+        res.status(500).json({ error: 'Failed to fetch movie suggestions' });
+    }
 });
 
-app.get('/api/suggest-movie', (req, res) => {
-    const query = req.query.q.toLowerCase();
-    
-    // Get the movie titles from the `movies` array dynamically
-    const movieTitles = movies.map(movie => movie.title);
-    
-    const suggestions = movieTitles.filter(movie =>
-      movie.toLowerCase().includes(query)
-    );
-    
-    res.json(suggestions);
+app.use((err, req, res, next) => {
+    console.error('Error:', err);
+    res.status(500).send('Something broke!');
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://34.93.164.60:${PORT}`);
 });

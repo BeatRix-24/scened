@@ -6,6 +6,7 @@ const movieFrame = document.getElementById("movie-frame");
       const errorMessage = document.getElementById("error-message");
 const suggestionsDiv = document.getElementById("suggestions");
 let highlightedIndex = -1;
+document.addEventListener('DOMContentLoaded', initGame);
 
       let currentMovie;
       let currentFrame = 0;
@@ -14,7 +15,7 @@ let highlightedIndex = -1;
 
       async function fetchRandomMovie() {
         try {
-          const response = await fetch("http://localhost:3000/api/next-movie");
+             const response = await fetch("http://34.93.164.60/api/next-movie");       
           if (!response.ok) {
             throw new Error("Failed to fetch movie data");
           }
@@ -95,21 +96,21 @@ let highlightedIndex = -1;
         }
       }
 
-      async function fetchSuggestions(query) {
-        try {
-          const response = await fetch(`http://localhost:3000/api/suggest-movie?q=${query}`);
-          if (!response.ok) {
+async function fetchSuggestions(query) {
+    try {
+        const response = await fetch(`http://34.93.164.60/api/suggest-movie?q=${query}`);
+        if (!response.ok) {
             throw new Error("Failed to fetch suggestions");
-          }
-          const suggestions = await response.json();
-          return suggestions;
-        } catch (error) {
-          console.error("Error fetching suggestions:", error);
-          return [];
         }
-      }
-      
-      function showSuggestions(suggestions) {
+        const suggestions = await response.json();
+        return suggestions;
+    } catch (error) {
+        console.error("Error fetching suggestions:", error);
+        return [];
+    }
+}
+
+           function showSuggestions(suggestions) {
         // Clear previous suggestions
         suggestionsDiv.innerHTML = "";
       
