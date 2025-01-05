@@ -81,6 +81,34 @@ document.addEventListener('DOMContentLoaded', initGame);
         updateFrame();
       }
 
+
+      const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+
+function updateFrameNavigationButtons() {
+  // Disable "Previous" button if on the first frame
+  prevBtn.disabled = currentFrame === 0;
+
+  // Disable "Next" button if on the last frame
+  nextBtn.disabled = currentFrame === 5;
+}
+
+prevBtn.addEventListener("click", () => {
+  if (currentFrame > 0) {
+    currentFrame--;
+    updateFrame(); // Update the displayed frame
+    updateFrameNavigationButtons(); // Update button states
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  if (currentFrame < 5) {
+    currentFrame++;
+    updateFrame(); // Update the displayed frame
+    updateFrameNavigationButtons(); // Update button states
+  }
+});
+
       async function initGame() {
         currentFrame = 0;
         guessesRemaining = 6;
@@ -93,6 +121,7 @@ document.addEventListener('DOMContentLoaded', initGame);
         currentMovie = await fetchRandomMovie();
         if (currentMovie) {
           updateFrame();
+          updateFrameNavigationButtons();
         }
       }
 
