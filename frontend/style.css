@@ -373,3 +373,42 @@ cursor: not-allowed;
   display: flex;
   gap: 10px;
 }
+
+#upload-btn {
+  display: block;
+  width: 50%; /* Half the width of the search container and submit button */
+  height: 50px; /* Set a fixed height, you can adjust as needed */
+  margin: 20px auto; /* Center horizontally and add space around */
+  text-decoration: none;
+  color: white;
+  background-color: #2e5291;
+  text-align: center;
+  line-height: 50px; /* Vertically center the text within the button */
+  border-radius: 5px;
+  font-size: large;
+  box-sizing: border-box; /* Ensure padding and border are included in the width/height */
+}
+
+/* Change background color when hovering */
+#upload-btn:hover {
+  background-color: #0056b3;
+}
+
+.upload-submit-btn{
+  display: block;
+  width: 50%; /* Half the width of the search container and submit button */
+  height: 50px; /* Set a fixed height, you can adjust as needed */
+  margin: 20px auto; /* Center horizontally and add space around */
+  text-decoration: none;
+  color: white;
+  background-color: #2e5291;
+  text-align: center;
+  line-height: 50px; /* Vertically center the text within the button */
+  border-radius: 5px;
+  font-size: large;
+  box-sizing: border-box; /* Ensure padding and border are included in the width/height */
+}
+
+.upload-submit-btn:hover{
+  background-color: #0056b3;
+}
