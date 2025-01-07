@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Movie - Scened</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="logo">Scened</a>
+            <div class="nav-links">
+                <a href="index.html" class="about-us-btn">Home</a>
+                <a href="about.html" class="about-us-btn">About Us</a>
+            </div>
+        </div>
+
+        <div class="upload-container">
+            <h1>Upload New Movie</h1>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="movieTitle">Movie Title:</label>
+                    <input type="text" id="movieTitle" name="movieTitle" required>
+                </div>
+
+                <div class="frames-upload">
+                    <h2>Upload Frames (Exactly 6)</h2>
+                    <div class="frame-inputs">
+                        <div class="frame-input">
+                            <label for="frame1">Frame 1:</label>
+                            <input type="file" id="frame1" name="frames" accept="image/*" required>
+                            <img id="preview1" class="frame-preview">
+                        </div>
+                        <div class="frame-input">
+                            <label for="frame2">Frame 2:</label>
+                            <input type="file" id="frame2" name="frames" accept="image/*" required>
+                            <img id="preview2" class="frame-preview">
+                        </div>
+                        <div class="frame-input">
+                            <label for="frame3">Frame 3:</label>
+                            <input type="file" id="frame3" name="frames" accept="image/*" required>
+                            <img id="preview3" class="frame-preview">
+                        </div>
+                        <div class="frame-input">
+                            <label for="frame4">Frame 4:</label>
+                            <input type="file" id="frame4" name="frames" accept="image/*" required>
+                            <img id="preview4" class="frame-preview">
+                        </div>
+                        <div class="frame-input">
+                            <label for="frame5">Frame 5:</label>
+                            <input type="file" id="frame5" name="frames" accept="image/*" required>
+                            <img id="preview5" class="frame-preview">
+                        </div>
+                        <div class="frame-input">
+                            <label for="frame6">Frame 6:</label>
+                            <input type="file" id="frame6" name="frames" accept="image/*" required>
+                            <img id="preview6" class="frame-preview">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Upload Movie</button>
+            </form>
+            <div id="uploadStatus" class="upload-status"></div>
+        </div>
+    </div>
+    <script src="upload.js"></script>
+</body>
+</html>
